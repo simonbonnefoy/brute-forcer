@@ -62,3 +62,29 @@ if __name__ == '__main__':
     for password in pass_list:
         pool.apply_async(ssh_attack, args=(options.user, options.target, password, event)) 
     print('Code executed in: ', time.time() - t1)
+    
+    ####################################################
+#    def f(q,x,n, array):
+#    print(x%2)
+#    if x==3:
+#        n.value = 3
+#        i =0
+#        #for j in "test":
+#        #    array[i] = j
+#        #    i+=1
+#        array="test"
+#
+#    q.put([x])
+#
+#if __name__ == '__main__':
+#    n = Value('i',1)
+#    q = Queue()
+#    array = Array('c', 15)
+#
+#    p = [Process(target=f, args=(q,x,n,array)) for x in range(5)]
+#    for pr in p:
+#       pr.start()
+#        print(q.get())    # prints "[42, None, 'hello']"
+#        pr.join()
+#print(n.value)
+#print(array[:])
