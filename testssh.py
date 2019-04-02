@@ -64,6 +64,10 @@ if __name__ == '__main__':
     print('Code executed in: ', time.time() - t1)
     
     ####################################################
+    #Test on data sharing in multiprocessing
+    #Also see here for some more doc on share c_types
+    # https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.sharedctypes
+    ####################################################
 #    def f(q,x,n, array):
 #    print(x%2)
 #    if x==3:
