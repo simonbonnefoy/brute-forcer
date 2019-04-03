@@ -69,7 +69,7 @@ if __name__ == '__main__':
     #print(re.get())
 
 ##############################3
-
+#also check the manager.dict to retrieve value https://docs.python.org/2/library/multiprocessing.html
     for password in pass_list:
         p = mp.Process(target=ssh_attack, args=(options.user, options.target, password, event,array,q))
         p.start()
