@@ -82,6 +82,9 @@ if __name__ == '__main__':
     print("The password is " + queue.get())
     print('Code executed in: '+ str(time.time() - t1))
     exit(0)
+#
+#Also check here for implementation of multiproc with feeding proc on the fly 
+#https://github.com/averagesecurityguy/scripts/blob/master/bruteforce/brute_http_basic.py
 
 ##############################3
 ##Working with process
