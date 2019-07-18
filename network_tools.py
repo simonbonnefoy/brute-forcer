@@ -4,6 +4,7 @@ import paramiko
 import time
 import optparse
 from net_tools import get_ping
+import mysql.connector
 
 class NetworkTools:
 
@@ -29,8 +30,21 @@ class NetworkTools:
     def reset_index(self):
         self.index = 0
 
-    def mysql_connection(self, passwor, queue, index, found_password):
-        print("Sorry, this is not ready yet!")
+    def mysql_connection(self, password, queue, index, found_password):
+        print('Testing password: ' + password + "\t\t #" + str(index.value))
+        index.value += 1
+        try:
+            cnx = mysql.connector.connect(user=self.user, password=password,\
+                    host=self.host, port=self.port)
+            self.good_password = str(password)
+            print("we found the password " + str(password))
+            queue.put(password)
+            found_password.value=password
+            return True
+
+        except:
+            return False
+
 
     def ssh_connection(self, password, queue, index, found_password):
         print('Testing password: ' + password + "\t\t #" + str(index.value))
