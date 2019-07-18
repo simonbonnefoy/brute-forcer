@@ -73,8 +73,11 @@ class NetworkTools:
     def run(self):
 
         if self.protocol == "mysql":
+
+            #setting the method to call for this protocol
             self.caller = self.mysql_connection
         if self.protocol=="ssh":
+
             #creating the ssh connection object
             self.connection = paramiko.SSHClient()
 
