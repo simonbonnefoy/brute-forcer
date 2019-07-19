@@ -3,8 +3,8 @@ from multiprocessing import Value, Lock
 import paramiko
 import time
 import optparse
-from net_tools import get_ping
-from network_tools import *
+from network_tools import get_ping
+from connection_tools import *
 
 def get_arguments():
     parser = optparse.OptionParser()
@@ -36,18 +36,21 @@ if __name__ == '__main__':
     options = get_arguments()
 
     #Checking if the server can be pinged
-    get_ping(str(options.target))
+    check_ping = get_ping(str(options.target))
+    if (check_ping == False):
+        exit(0)
+    
     
     #Create the connection object
-    network_tools = NetworkTools(options.user, options.target, \
+    connection = ConnectionTools(options.user, options.target, \
             options.port, options.protocol, options.num_processes,\
             options.password_file) 
 
     #printer start-up baneer
-    network_tools.print_attack()
+    connection.print_attack()
 
     t1 = time.time()
-    network_tools.run()
+    connection.run()
 
     print("Execution time: " + str (time.time() - t1))
 
