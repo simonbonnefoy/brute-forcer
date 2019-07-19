@@ -3,7 +3,6 @@ from multiprocessing import Value, Lock
 import paramiko
 import time
 import optparse
-from network_tools import get_ping
 import mysql.connector
 
 class ConnectionTools:
@@ -32,6 +31,9 @@ class ConnectionTools:
 
     def set_protocol(self, protocol):
         self.protocol = protocol
+
+    def set_port(self, port):
+        self.port = port
 
     def mysql_connection(self, password, queue, index, found_password):
         print('Testing password: ' + password + "\t\t #" + str(index.value))

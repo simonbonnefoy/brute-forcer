@@ -3,7 +3,7 @@ from multiprocessing import Value, Lock
 import paramiko
 import time
 import optparse
-from network_tools import get_ping
+from network_tools import *
 from connection_tools import *
 
 def get_arguments():
@@ -35,9 +35,18 @@ if __name__ == '__main__':
     #retrieving options
     options = get_arguments()
 
-    #Checking if the server can be pinged
-    check_ping = get_ping(str(options.target))
-    if (check_ping == False):
+    #Creating a NetworkTools object, to inspect
+    #if the network request is consistent
+    network_info = NetworkTools(options.target, \
+            options.port, options.protocol)
+
+    #Checking if the server can be pinged and 
+    #if the protocol is consistent
+    network_info.get_ping()
+    network_info.get_nmap()
+
+    if (not network_info.get_network_status()):
+        print('Exiting the program due to network problem')
         exit(0)
     
     
