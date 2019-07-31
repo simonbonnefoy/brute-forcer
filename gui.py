@@ -103,6 +103,8 @@ class Gui(QWidget):
 
 
     def set_attack_parameters(self):
+        '''method used to retrieve all the parameters
+        and launch the attack'''
         username = self.username_Edit.text()
         target = self.target_Edit.text()
         cores = self.cores_num_Edit.text()
@@ -113,6 +115,8 @@ class Gui(QWidget):
         
     
     def openFileNameDialog(self):
+        '''method used to open the file browser and
+        retrieve the dictionnary'''
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
@@ -132,6 +136,7 @@ class Gui(QWidget):
             event.ignore()
 
     def center(self):
+        '''centers the window in the middle of the screen'''
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
