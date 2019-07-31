@@ -2,6 +2,8 @@ Suite of script for brute force attack.
 So far the program is compatible with python2/3
 The following librairies are needed
 
+!!!Note, the GUI is made to work on python3, not maintenance for python2!!!
+
 
 ###############################################
 To install all the dependencies on Kali linux:
@@ -9,6 +11,7 @@ To install all the dependencies on Kali linux:
 
 apt-get install build-essential libssl-dev libffi-dev python-dev gcc
 apt-get install libffi-dev
+apt-get install python3-pyqt5
 
 pip install paramiko
 pip install python-nmap
