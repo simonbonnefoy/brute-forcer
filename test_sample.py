@@ -6,9 +6,9 @@ import subprocess
 # content of test_sample.py
 
 
-def test_network_tools():
-    ping = network_tools.get_ping('127.0.0.1')
-    assert (ping == True or ping == False)
+#def test_network_tools():
+#    ping = network_tools.get_ping('127.0.0.1')
+#    assert (ping == True or ping == False)
 
 def test_ssh_connection_tools():
 
