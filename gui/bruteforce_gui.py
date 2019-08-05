@@ -8,35 +8,13 @@ from network_tools import *
 from connection_tools import *
 import logging
 
-
-class QTextEditLogger(logging.Handler):
-    def __init__(self, parent, widget):
-        super().__init__()
-        self.widget = widget
-        self.widget.setReadOnly(True)
-        #self.widget = QtWidgets.QPlainTextEdit(parent)
-        #self.widget.setReadOnly(True)
-
-    def emit(self, record):
-        msg = self.format(record)
-        self.widget.appendPlainText(msg)
-
+    
 class MainPage(QDialog):
     def __init__(self):
         super(MainPage, self).__init__()
 
         #loading the main gui
         loadUi('main.ui', self)
-        ######################################################
-        logTextBox = QTextEditLogger(self, self.log_window)
-
-        # You can format what is printed to text box
-        logTextBox.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-        logging.getLogger().addHandler(logTextBox)
-        # You can control the logging level
-        logging.getLogger().setLevel(logging.DEBUG)
-        ######################################################
-
 
         #define action of run attack button
         self.RunAttack.clicked.connect(self.run_attack)
@@ -68,7 +46,6 @@ class MainPage(QDialog):
         password_file = self.password_file.text()
         protocol = self.protocol.itemText(self.protocol.currentIndex())
         network_check = self.network_check.itemText(self.network_check.currentIndex())
-        print(username, target, cores, port, password_file, protocol, network_check)
 
         ####################################
         #Creating a NetworkTools object, to inspect
