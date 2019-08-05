@@ -6,6 +6,8 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import (QLabel, QLineEdit,
     QTextEdit, QGridLayout )
 from PyQt5.QtCore import Qt
+from network_tools import *
+from connection_tools import *
 
 class Gui(QWidget):
     
@@ -16,7 +18,9 @@ class Gui(QWidget):
 
     def initUI(self):
 
-        #object to retrieve target and username
+        #objects to retrieve 
+        
+        #target and username
         target = QLabel('Target')
         username = QLabel('Username')
         self.target_Edit = QLineEdit()
@@ -25,17 +29,20 @@ class Gui(QWidget):
         #Ask number of cores to use
         cores_num = QLabel('Number or cores')
         self.cores_num_Edit = QLineEdit()
-        self.username_Edit = QLineEdit()
 
         #ask for the protocol required
         protocol_lbl = QLabel("Protocol", self)
 
         self.protocol_combo = QComboBox(self)
-        self.protocol_combo.addItem("ssh")
-        self.protocol_combo.addItem("mysql")
+        self.protocol_combo.addItem('ssh')
+        self.protocol_combo.addItem('mysql')
         self.protocol_combo.move(50, 50)
         protocol_lbl.move(50, 150)
         
+        #Ask port to attack
+        port_num = QLabel('Port')
+        self.port_num_Edit = QLineEdit()
+        self.port_Edit = QLineEdit()
         
         #Button to browse and get dictionnary
         self.dictionnary_btn = QPushButton('Open dictionnary', self)
@@ -62,6 +69,8 @@ class Gui(QWidget):
         self.quit_btn.move(20, 20)
         self.quit_btn.clicked.connect(QApplication.instance().quit)
 
+        #Set the grid and add the objects
+
         #Set the grid
         grid = QGridLayout()
         grid.setSpacing(7)
@@ -82,17 +91,21 @@ class Gui(QWidget):
         grid.addWidget(protocol_lbl, 4, 0)
         grid.addWidget(self.protocol_combo, 4, 1)
 
+        #Add port
+        grid.addWidget(port_num, 5, 0)
+        grid.addWidget(self.port_num_Edit, 5, 1)
+
         #Add dictionnary
-        grid.addWidget(self.dictionnary_btn, 5, 0)
-        grid.addWidget(self.dictionnary_Edit, 5, 1)
+        grid.addWidget(self.dictionnary_btn, 6, 0)
+        grid.addWidget(self.dictionnary_Edit, 6, 1)
 
         #Add network checks
-        grid.addWidget(network_checks_lbl, 6, 0)
-        grid.addWidget(self.network_checks_combo, 6, 1)
+        grid.addWidget(network_checks_lbl, 7, 0)
+        grid.addWidget(self.network_checks_combo, 7, 1)
 
         #Add buttons to quit or attack 
-        grid.addWidget(self.quit_btn, 7, 0)
-        grid.addWidget(self.attack_btn, 7, 1)
+        grid.addWidget(self.quit_btn, 8, 0)
+        grid.addWidget(self.attack_btn, 8, 1)
 
         #Set layout of the main widget
         self.setLayout(grid) 
@@ -109,10 +122,40 @@ class Gui(QWidget):
         target = self.target_Edit.text()
         cores = self.cores_num_Edit.text()
         protocol = self.protocol_combo.itemText(self.protocol_combo.currentIndex())
+        port = int(self.port_num_Edit.text())
         network_checks = self.network_checks_combo.itemText(self.protocol_combo.currentIndex())
-        dictionnary = self.dictionnary_Edit.text()
-        print(username, target, cores, protocol, network_checks, dictionnary)
+        password_file = self.dictionnary_Edit.text()
+        print(username, target, cores, protocol, port, network_checks, password_file)
         
+        ####################################
+        #Creating a NetworkTools object, to inspect
+        #if the network request is consistent
+        if network_checks == 'yes':
+            network_info = NetworkTools(target, \
+                 port, protocol)
+
+            #Checking if the server can be pinged and 
+            #if the protocol is consistent
+            network_info.get_ping()
+            network_info.get_nmap()
+
+            if (not network_info.get_network_status()):
+                print('Exiting the program due to network problem')
+                exit(0)
+        
+        
+        #Create the connection object
+        connection = ConnectionTools(username, target, \
+                port, protocol, cores,\
+                password_file) 
+
+        #printer start-up baneer
+        connection.print_attack()
+
+        t1 = time.time()
+        connection.run()
+
+        print("Execution time: " + str (time.time() - t1))
     
     def openFileNameDialog(self):
         '''method used to open the file browser and
@@ -121,7 +164,6 @@ class Gui(QWidget):
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
         if fileName:
-            print(fileName)
             self.dictionnary_Edit.setText(fileName)
 
 
@@ -142,10 +184,11 @@ class Gui(QWidget):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
     
-        
-if __name__ == '__main__':
-    
+def main():
     app = QApplication(sys.argv)
     ex = Gui()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()    
 

@@ -13,6 +13,11 @@ apt-get install build-essential libssl-dev libffi-dev python-dev gcc
 apt-get install libffi-dev
 apt-get install python3-pyqt5
 
+For GUI devel
+apt-get install pyqt5-dev-tools
+apt-get install qttools5-dev-tools
+apt-get install qttools5-dev
+
 pip install paramiko
 pip install python-nmap
 pip install mysql-connector-python
