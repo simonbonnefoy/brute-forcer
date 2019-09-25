@@ -32,18 +32,18 @@ https://pytest.org/en/latest/
 Running the test unit  
 ######################  
 To run the test unit, and check that all the   
-librairies are correctly loaded, just type 'pytest' in the main  
+librairies are correctly loaded, just type `pytest` in the main  
 folder, where the test_sample.py is located.  
-pytest will go through the test in the test_sample.py, and report any
+pytest will go through the test in the test_sample.py, and report any  
 problem during the unit test.
-
-####################
-Setting the system
-####################
-On kali linux the ssh server is not running by default, 
-you need to start it.
-Run the following command to start the ssh server:
-systemctl start ssh
-This is not required for the test unit, but to test the ssh bruteforce
-on your local computer.
+  
+####################  
+Setting the system  
+####################  
+On kali linux the ssh server is not running by default,   
+you need to start it.  
+Run the following command to start the ssh server:  
+`systemctl start ssh`  
+This is not required for the test unit, but to test the ssh bruteforce  
+on your local computer.  
 
