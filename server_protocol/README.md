@@ -9,7 +9,7 @@ The following librairies are needed
 To install all the dependencies on Kali linux:  
 ###############################################  
   
-`apt-get install build-essential libssl-dev libffi-dev python-dev gcc    `
+`apt-get install build-essential libssl-dev libffi-dev python-dev gcc  `  
 `apt-get install libffi-dev ` 
 `apt-get install python3-pyqt5`    
 
