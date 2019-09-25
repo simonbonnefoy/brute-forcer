@@ -5,23 +5,24 @@ The following librairies are needed
 !!!Note, the GUI is made to work on python3, not maintenance for python2!!!
 
 
-###############################################
-To install all the dependencies on Kali linux:
-###############################################
+###############################################  
+To install all the dependencies on Kali linux:  
+###############################################  
+  
+`apt-get install build-essential libssl-dev libffi-dev python-dev gcc  `  
+`apt-get install libffi-dev `     
+`apt-get install python3-pyqt5`        
 
-apt-get install build-essential libssl-dev libffi-dev python-dev gcc
-apt-get install libffi-dev
-apt-get install python3-pyqt5  
+`pip install paramiko`  
+`pip install python-nmap`  
+`pip install mysql-connector-python`  
+`pip install pytest` 
 
 For GUI devel  
-apt-get install pyqt5-dev-tools  
-apt-get install qttools5-dev-tools  
-apt-get install qttools5-dev  
+`apt-get install pyqt5-dev-tools`     
+`apt-get install qttools5-dev-tools`     
+`apt-get install qttools5-dev`     
 
-pip install paramiko  
-pip install python-nmap  
-pip install mysql-connector-python  
-pip install pytest  
 
 http://docs.paramiko.org/en/2.4/api/client.html  
 https://dev.mysql.com/doc/connector-python/en/connector-python-example-connecting.html  
